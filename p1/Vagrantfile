@@ -1,0 +1,29 @@
+
+BOX_IMAGE   = "debian/trixie64"
+RAM_SIZE    = 1024
+CPUS        = 1
+LOGIN       = "sbandaog"
+SCRIPT_DIR  = "script"
+
+NODES = [
+  { hostname: "#{LOGIN}S",  ip: "192.168.56.110", provision: "#{SCRIPT_DIR}/agent.sh" },
+  { hostname: "#{LOGIN}SW", ip: "192.168.56.111", provision: "#{SCRIPT_DIR}/controller.sh" },
+]
+
+Vagrant.configure(2) do |config|
+  config.vm.box = BOX_IMAGE
+  # config.vm.box_version = "13.20260519.1"
+
+  NODES.each do |node|
+
+    config.vm.define node[:hostname] do |control|
+      control.vm.hostname = node[:hostname]
+      control.vm.network "private_network", ip: node[:ip]
+      control.vm.provider "libvirt" do |lv|
+        lv.cpus = CPUS
+        lv.memory = RAM_SIZE
+      end
+      control.vm.provision "shell", path: node[:provision]
+    end
+ end
+end
