@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Setting up p3 environment..."
-
 install_dependencies() {
     sudo apt update
     sudo apt install -y ca-certificates curl
@@ -64,6 +62,19 @@ install_kubectl() {
     echo "kubectl installed."
 }
 
+install_k3d() {
+    if command -v k3d >/dev/null 2>&1; then
+        echo "k3d is already installed."
+        return
+    fi
+
+    echo "Installing k3d..."
+
+    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
+    echo "k3d installed."
+}
+
 verify_installation() {
     echo
     echo "Installed tools:"
@@ -71,6 +82,7 @@ verify_installation() {
     docker --version
     docker compose version
     kubectl version --client
+    k3d version
 
     echo
     if docker info >/dev/null 2>&1; then
@@ -83,9 +95,13 @@ verify_installation() {
 }
 
 main() {
+    echo "Setting up p3 environment..."
+
+
     install_dependencies
     install_docker
     install_kubectl
+    install_k3d
     verify_installation
 
     echo
