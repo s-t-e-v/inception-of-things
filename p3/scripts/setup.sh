@@ -2,15 +2,11 @@
 set -e
 
 # k3d
-k3d cluster create --config "confs/k3d-cluster.yaml" --wait
+k3d cluster create --config "confs/k3d-cluster.yaml"
 
 
-kubectl create namespace argocd
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl wait --for=condition=available --timeout=600s deployment/argocd-applicationset-controller -n argocd
 
-# ? jsonpath {.data.password} ??? how it works ???
-# password=$(kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
-git clone https://github.com/s-t-e-v/argocd-app-sbandaog
-cd argocd-app-sbandaog
-
-kubectl apply -f application.yaml
+kubectl apply -n argocd -f confs/application.yaml
