@@ -19,6 +19,10 @@ if ! command -v k3s >/dev/null 2>&1; then
   curl -sfL https://get.k3s.io | sh -
 fi
 
+if command -v systemctl >/dev/null 2>&1; then
+  systemctl enable --now k3s
+fi
+
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 for i in $(seq 1 30); do
