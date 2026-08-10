@@ -2,6 +2,17 @@
 
 Ce guide explique comment lancer le déploiement Kubernetes de la partie 2, vérifier que les applications fonctionnent, et tester l’accès via l’Ingress.
 
+## Doc officielle
+
+- https://kubernetes.io/docs/
+- https://kubernetes.io/docs/reference/kubernetes-api/
+- https://kubernetes.io/docs/concepts/
+- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+- https://kubernetes.io/docs/concepts/services-networking/service/?utm_source=chatgpt.com
+- https://kubernetes.io/docs/concepts/services-networking/ingress/?utm_source=chatgpt.com
+- https://kubernetes.io/docs/concepts/configuration/configmap/
+- https://kubespec.dev/
+
 ## Prérequis
 
 - Une machine Linux Ubuntu ou Debian
