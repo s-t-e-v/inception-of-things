@@ -20,7 +20,18 @@ if ! command -v k3s >/dev/null 2>&1; then
 fi
 
 if command -v systemctl >/dev/null 2>&1; then
-  systemctl enable --now k3s
+    if ! systemctl is-enabled --quiet k3s || ! systemctl is-active --quiet k3s; then
+        echo "Configuring K3s..."
+        sudo systemctl enable --now k3s
+    fi
+
+    if systemctl is-enabled --quiet k3s && systemctl is-active --quiet k3s; then
+        echo "K3s is enabled and running."
+    else
+        echo "ERROR: Failed to configure K3s."
+        sudo systemctl status k3s --no-pager
+        exit 1
+    fi
 fi
 
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
