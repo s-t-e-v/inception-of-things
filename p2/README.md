@@ -127,3 +127,28 @@ sudo k3s kubectl delete -f /tmp/manifests/namespace.yaml
 - Le routage par Host dépend de l’Ingress Controller Traefik, déjà livré avec K3s.
 - Si `curl` ne retourne rien, vérifier que le port `80` est bien ouvert et que l’Ingress Controller est prêt.
 - Si l’application ne répond pas, vérifier les Pods avec `kubectl get pods -n webapps`.
+
+## 10. Virtual Machine Manager
+
+Libvirt vs KVM vs QEMU
+
+C'est souvent là que la confusion arrive :
+
+Composant	Rôle
+KVM	Permet au noyau Linux d'utiliser les extensions de virtualisation du CPU
+QEMU	Émule/fournit le matériel virtuel de la VM
+libvirt	Gère les VM et fournit une API commune
+virsh	Interface en ligne de commande pour libvirt
+virt-manager	Interface graphique pour libvirt
+
+Donc, pour une installation classique :
+
+KVM + QEMU = moteur de virtualisation
+libvirt = gestionnaire
+virsh / virt-manager = outils pour le piloter
+
+# Commande pour verifier qu'il a bien 3 pods pour app2
+    for i in {1..10}; do
+        curl -s -H "Host: app2.com" http://192.168.121.189 | grep -o 'app-two-[^<]*'
+    done
+

@@ -1,9 +1,9 @@
 
 BOX_IMAGE   = "debian/trixie64"
-RAM_SIZE    = 1024
-CPUS        = 1
+RAM_SIZE    = 2024
+CPUS        = 2
 LOGIN       = "sbandaog"
-SCRIPT_DIR  = "script"
+SCRIPT_DIR  = "scripts"
 
 NODES = [
   { hostname: "#{LOGIN}S",  ip: "192.168.56.110", provision: "#{SCRIPT_DIR}/agent.sh" },
@@ -13,6 +13,9 @@ NODES = [
 Vagrant.configure(2) do |config|
   config.vm.box = BOX_IMAGE
   # config.vm.box_version = "13.20260519.1"
+
+  config.vm.synced_folder "../p2", "/home/vagrant/p2"
+  # Partage le dossier p2 avec les VM de p1
 
   NODES.each do |node|
 
