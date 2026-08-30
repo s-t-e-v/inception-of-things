@@ -1,4 +1,4 @@
-.PHONY: help install setup status
+.PHONY: help install setup status fclean
 
 help:
 	@printf '%s\n' \
@@ -20,3 +20,6 @@ status:
 	kubectl get nodes
 	kubectl get pods -A -o wide
 	kubectl get ingress,services,pods -n dev
+
+fclean:
+	@sudo rm -rf ./data
