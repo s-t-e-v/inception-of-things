@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+is_installed() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 install_dependencies() {
     local p3_install_script
 
@@ -14,39 +18,46 @@ install_dependencies() {
     fi
 }
 
-install_postgresql() {
-    :
-}
-
-install_redis() {
-    :
-}
-
-install_minio() {
-    :
-}
-
 install_helm() {
-    :
+    if is_installed helm; then
+        echo "helm is already installed."
+        return 0
+    fi
+
+    echo "Installing helm..."
+
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+    
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    rm -f get_helm.sh
+
+    echo "helm installed."
 }
 
 verify_installation() {
+    local missing=0
+
     echo
-    echo "Installed tools:"
+    echo "Checking installation..."
 
-    # docker --version
-    # docker compose version
-    # kubectl version --client
-    # k3d version
+    for tool in helm; do
+        if is_installed helm; then
+            echo "[OK] $tool"
+        else
+            echo "[MISSING] $tool"
+            missing=1
+        fi
+    done
 
-    # echo
-    # if docker info >/dev/null 2>&1; then
-    #     echo "Docker is accessible without sudo."
-    # else
-    #     echo "Docker is installed, but this session cannot access it without sudo."
-    #     echo "Current groups: $(id -nG)"
-    #     echo "Reboot the VM if the docker group was just added."
-    # fi
+    if [ "$missing" -ne 0 ]; then
+        return 1
+    fi
+
+    echo
+    helm version
+
+    return 0
 }
 
 main() {
@@ -54,9 +65,7 @@ main() {
 
 
     install_dependencies
-    install_postgresql
-    install_redis
-    install_minio
+    install_helm
     verify_installation
 
     echo

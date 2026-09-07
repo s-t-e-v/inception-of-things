@@ -1,0 +1,15 @@
+auth:
+  enabled: true
+  aclUsers:
+    default:
+      password: "$PASS"
+      permissions: "~* &* +@all"
+
+replica:
+  enabled: true
+  replicas: 3
+  persistence:
+    size: 8Gi
+
+valkeyConfig: |
+  appendonly yes
