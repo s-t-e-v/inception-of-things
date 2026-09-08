@@ -28,19 +28,21 @@ kubectl wait --for=condition=Ready pod --all -n gitlab --timeout=600s
 helm repo add valkey https://github.com/valkey-io/valkey-helm
 helm repo update
 helm upgrade --install valkey valkey/valkey \
-    --namespace gitlab
+    --namespace gitlab \
+    -f ../confs/valkey-values.yaml
 
-kubectl apply -f ../confs/valkey-values.yaml -n gitlab
-kubectl wait --for=condition=Ready pod --all -n gitlab --timeout=600s
+# kubectl apply -f ../confs/valkey-values.yaml -n gitlab
+# kubectl wait --for=condition=Ready pod --all -n gitlab --timeout=600s
 
 # 5. Install/provision object storage
 helm repo add garage https://git.deuxfleurs.fr/Deuxfleurs/garage
 helm repo update
 helm upgrade --install garage garage/garage \
-    --namespace gitlab
+    --namespace gitlab \
+    -f ../confs/garage-values.yaml
 
-kubectl apply -f ../confs/garage-values.yaml -n gitlab
-kubectl wait --for=condition=Ready pod --all -n gitlab --timeout=600s
+# kubectl apply -f ../confs/garage-values.yaml -n gitlab
+# kubectl wait --for=condition=Ready pod --all -n gitlab --timeout=600s
 
 # 5.5  Create required secrets
 
@@ -53,6 +55,6 @@ helm upgrade --install gitlab gitlab/gitlab \
 
 # 7. Point GitLab at the PostgreSQL Service
 # apply gitlab configuration
-kubectl apply -f ../confs/gitlab-values.yaml -n gitlab
+# kubectl apply -f ../confs/gitlab-values.yaml -n gitlab
 
 # configure integration with ArgoCD

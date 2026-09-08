@@ -36,21 +36,14 @@ install_helm() {
 }
 
 verify_installation() {
-    local missing=0
 
     echo
     echo "Checking installation..."
 
-    for tool in helm; do
-        if is_installed helm; then
-            echo "[OK] $tool"
-        else
-            echo "[MISSING] $tool"
-            missing=1
-        fi
-    done
-
-    if [ "$missing" -ne 0 ]; then
+    if is_installed helm; then
+        echo "[OK] helm"
+    else
+        echo "[MISSING] helm"
         return 1
     fi
 
