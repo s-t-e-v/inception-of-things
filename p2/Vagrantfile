@@ -1,0 +1,22 @@
+BOX_IMAGE   = "debian/trixie64"
+RAM_SIZE    = 2024
+CPUS        = 2
+LOGIN       = "pgrellieS"
+SCRIPT_DIR  = "scripts"
+
+Vagrant.configure(2) do |config|
+    config.vm.box = BOX_IMAGE
+
+    config.vm.provision "file", source: "manifests", destination: "/home/vagrant/manifests"
+
+    config.vm.define LOGIN do |control|
+        control.vm.hostname = LOGIN
+        control.vm.network "private_network", ip: "192.168.56.110"
+        control.vm.provider "libvirt" do |lv|
+            lv.cpus = CPUS
+            lv.memory = RAM_SIZE
+        end
+        control.vm.provision "shell", path: "#{SCRIPT_DIR}/install.sh"
+        # control.vm.provision "shell", inline: "chmod +x /home/vagrant/scripts/install.sh && bash /home/vagrant/scripts/install.sh"
+    end
+end

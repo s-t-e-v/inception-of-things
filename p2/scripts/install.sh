@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MANIFESTS_DIR="${SCRIPT_DIR}/../manifests"
+# SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MANIFESTS_DIR="manifests"
 
-if [[ ${EUID} -ne 0 ]]; then
-  echo "Please run this script as root." >&2
-  exit 1
-fi
+# if [[ ${EUID} -ne 0 ]]; then
+#   echo "Please run this script as root." >&2
+#   exit 1
+# fi
 
 if ! command -v curl >/dev/null 2>&1; then
   apt-get update
