@@ -6,7 +6,7 @@ help:
 		"" \
 		"Available targets:" \
 		"  help          Show this help message" \
-		"  install       Install the tools required for p3 (./scripts/install.sh)" \
+		"  install       Install dependencies (./scripts/install-dependencies.sh)" \
 		"  setup         Run project setup (./scripts/setup.sh)" \
 		"  recreate      Recreate the k3d cluster (clean + setup)" \
 		"  clean         Delete the k3d cluster (k3d cluster delete k3d-cluster)" \
@@ -14,7 +14,7 @@ help:
 		"  argocd-ui     Port-forward Argocd UI at https://localhost:8443"
 
 install:
-	@./scripts/install.sh
+	@./scripts/install-dependencies.sh
 
 setup:
 	@./scripts/setup.sh

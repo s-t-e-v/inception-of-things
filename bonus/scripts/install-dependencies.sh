@@ -8,7 +8,7 @@ is_installed() {
 install_dependencies() {
     local p3_install_script
 
-    p3_install_script="../p3/scripts/install.sh"
+    p3_install_script="../p3/scripts/install-dependencies.sh"
 
     if ! "$p3_install_script" --check; then
         if ! "$p3_install_script"; then

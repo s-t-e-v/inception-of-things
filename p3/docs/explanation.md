@@ -133,7 +133,7 @@ Now that we have all the notions, let's study how the infrastructure of p3 was s
 │   │   └── explanation.md
 │   ├── Makefile
 │   └── scripts
-│       ├── install.sh
+│       ├── install-dependencies.sh
 │       └── setup.sh
 └── README.md
 ```
@@ -151,7 +151,7 @@ help:
 		"" \
 		"Available targets:" \
 		"  help          Show this help message" \
-		"  install       Install the tools required for p3 (./scripts/install.sh)" \
+		"  install       Install dependencies (./scripts/install-dependencies.sh)" \
 		"  setup         Run project setup (./scripts/setup.sh)" \
 		"  recreate      Recreate the k3d cluster (clean + setup)" \
 		"  clean         Delete the k3d cluster (k3d cluster delete k3d-cluster)" \
@@ -159,7 +159,7 @@ help:
 		"  argocd-ui     Port-forward Argocd UI at https://localhost:8443"
 
 install:
-	@./scripts/install.sh
+	@./scripts/install-dependencies.sh
 
 setup:
 	@./scripts/setup.sh
@@ -180,7 +180,7 @@ clean:
 	k3d cluster delete k3d-cluster || true
 ```
 
-To setup the cluster, we need to install first it's dependencies. This is the job of `make install`, which calls the `install.sh` script. This script installs `curl` if it doesn't exist, `docker` because it is necessary for `k3d` since it is a container, then `k3d`.
+To setup the cluster, we need to install first it's dependencies. This is the job of `make install`, which calls the `install-dependencies.sh` script. This script installs `curl` if it doesn't exist, `docker` because it is necessary for `k3d` since it is a container, then `k3d`.
 
 Once k3d is installed, we need a script to create and setup our cluster. This is the job of `make setup` which calls the `setup.sh` script:
 

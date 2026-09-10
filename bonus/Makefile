@@ -6,7 +6,7 @@ help:
 		"" \
 		"Available targets:" \
 		"  help          Show this help message" \
-		"  install       Install the tools required for bonus (./scripts/install.sh)" \
+		"  install       Install dependencies (./scripts/install-dependencies.sh)" \
 		"  setup         Run project setup (./scripts/setup.sh)" \
 		"  recreate      Recreate the k3d cluster (clean + setup)" \
 		"  ssh-setup     Register this VM user's SSH key with GitLab" \
@@ -19,7 +19,7 @@ help:
 		"  clean         Delete the k3d cluster"
 
 install:
-	@./scripts/install.sh
+	@./scripts/install-dependencies.sh
 
 setup:
 	@./scripts/setup.sh
