@@ -35,6 +35,17 @@ install_helm() {
     echo "helm installed."
 }
 
+install_git_lfs() {
+    if git lfs version >/dev/null 2>&1; then
+        echo "git-lfs is already installed."
+        return 0
+    fi
+
+    echo "Installing git-lfs..."
+    sudo apt update
+    sudo apt install -y git-lfs
+}
+
 verify_installation() {
 
     echo
@@ -44,6 +55,13 @@ verify_installation() {
         echo "[OK] helm"
     else
         echo "[MISSING] helm"
+        return 1
+    fi
+
+    if git lfs version >/dev/null 2>&1; then
+        echo "[OK] git-lfs"
+    else
+        echo "[MISSING] git-lfs"
         return 1
     fi
 
@@ -59,6 +77,7 @@ main() {
 
     install_dependencies
     install_helm
+    install_git_lfs
     verify_installation
 
     echo

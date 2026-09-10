@@ -1,4 +1,4 @@
-.PHONY: help install setup recreate ssh-setup repository argocd-ui argocd-gitlab argocd-github status credentials clean
+.PHONY: help install setup recreate ssh-setup repository garage-demo argocd-ui argocd-gitlab argocd-github status credentials clean
 
 help:
 	@printf '%s\n' \
@@ -11,6 +11,7 @@ help:
 		"  recreate      Recreate the k3d cluster (clean + setup)" \
 		"  ssh-setup     Register this VM user's SSH key with GitLab" \
 		"  repository    Copy the GitHub configuration repository to GitLab" \
+		"  garage-demo   Push an image with Git LFS and verify Garage storage" \
 		"  argocd-ui     Port-forward Argo CD UI at https://localhost:8443" \
 		"  argocd-gitlab Copy the repository and switch Argo CD to GitLab" \
 		"  argocd-github Restore Argo CD's original GitHub source" \
@@ -31,8 +32,11 @@ recreate:
 ssh-setup:
 	@./scripts/setup-ssh.sh
 
-repository:
+repository: ssh-setup
 	@./scripts/copy-repository.sh
+
+garage-demo:
+	@./scripts/garage-demo.sh
 
 argocd-ui:
 	@$(MAKE) -C ../p3 argocd-ui

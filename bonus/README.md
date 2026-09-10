@@ -47,6 +47,20 @@ make argocd-github
 Use `make help` to list the optional status, UI, SSH, repository, and cleanup
 commands.
 
+## Prove Garage object storage
+
+GitLab uses the `git-lfs` Garage bucket while the other optional object-storage
+features remain disabled. Run the isolated demonstration with:
+
+```sh
+make garage-demo
+```
+
+This creates the private `root/garage-lfs-demo` project, pushes
+`assets/garage-demo.png` as a Git LFS object, fresh-clones it, verifies its
+contents, and prints the Garage bucket statistics. The command is safe to run
+again and does not modify the Argo CD repository.
+
 ## Important
 
 `make recreate` deletes and recreates the k3d cluster. GitLab data is stored in

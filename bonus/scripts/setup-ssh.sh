@@ -14,6 +14,8 @@ NAMESPACE="gitlab"
 DEPLOYMENT="gitlab-webservice-default"
 KEY_PATH="${HOME}/.ssh/id_ed25519"
 KEY_TITLE="inception-of-things"
+KNOWN_HOSTS_PATH="${HOME}/.ssh/known_hosts"
+GITLAB_KNOWN_HOST="[gitlab.localhost]:2222"
 
 if [[ ! -f "$KEY_PATH.pub" ]]; then
     printf '[ssh] Generating %s\n' "$KEY_PATH"
@@ -26,6 +28,18 @@ fi
 printf '[ssh] Waiting for the GitLab webservice\n'
 kubectl rollout status deployment/$DEPLOYMENT \
     --namespace "$NAMESPACE" --timeout=10m
+
+# k3d recreates the local GitLab host key.
+if [[ -f "$KNOWN_HOSTS_PATH" ]]; then
+    ssh-keygen -f "$KNOWN_HOSTS_PATH" -R "$GITLAB_KNOWN_HOST" >/dev/null
+fi
+
+if ssh -o BatchMode=yes -o ConnectTimeout=5 \
+    -o StrictHostKeyChecking=accept-new \
+    -T -p 2222 git@gitlab.localhost >/dev/null 2>&1; then
+    printf '[ssh] The SSH key is already registered\n'
+    exit 0
+fi
 
 public_key="$(<"$KEY_PATH.pub")"
 

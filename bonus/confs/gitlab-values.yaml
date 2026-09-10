@@ -7,10 +7,15 @@ global:
   appConfig:
     object_store:
       enabled: true
+      proxy_download: true
+      connection:
+        secret: gitlab-object-storage
+        key: config
     artifacts:
       enabled: false
     lfs:
-      enabled: false
+      enabled: true
+      bucket: git-lfs
     uploads:
       enabled: false
     packages:
@@ -41,6 +46,8 @@ global:
   gatewayApi:
     enabled: false
     installEnvoy: false
+    configureCertmanager: false
+    httpToHttpsRedirect: false
   ingress:
     enabled: true
     class: traefik
@@ -82,7 +89,7 @@ gitlab:
         memory: 1Gi
       limits:
         cpu: 2
-        memory: 2Gi
+        memory: 3Gi
     workhorse:
       resources:
         requests:
@@ -126,6 +133,9 @@ gitlab:
       limits:
         cpu: 1
         memory: 1Gi
+    persistence:
+      size: 1Gi
+      storageClass: local-path
   gitlab-exporter:
     enabled: false
   toolbox:
@@ -133,10 +143,5 @@ gitlab:
     backups:
       cron:
         enabled: false
-  gitaly:
-    persistence:
-      size: 1Gi
-      storageClass: local-path
-
 gitlab-runner:
   install: false
