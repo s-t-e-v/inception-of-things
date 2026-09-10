@@ -165,13 +165,7 @@ setup:
 	@./scripts/setup.sh
 
 argocd-ui:
-	@password=$$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' 2>/dev/null | base64 -d); \
-	if [ -n "$$password" ]; then \
-		printf 'Argocd initial admin password: %s\n' "$$password"; \
-	else \
-		printf 'Argocd initial admin password: unavailable yet\n'; \
-	fi
-	kubectl port-forward svc/argocd-server -n argocd 8443:443
+	@./scripts/argocd-ui.sh
 
 recreate:
 	@make clean

@@ -35,13 +35,7 @@ repository:
 	@./scripts/copy-repository.sh
 
 argocd-ui:
-	@password=$$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' 2>/dev/null | base64 --decode); \
-	if [ -n "$$password" ]; then \
-		printf 'Argo CD initial admin password: %s\n' "$$password"; \
-	else \
-		printf 'Argo CD initial admin password: unavailable yet\n'; \
-	fi
-	kubectl port-forward svc/argocd-server -n argocd 8443:443
+	@$(MAKE) -C ../p3 argocd-ui
 
 argocd-gitlab: repository
 	@kubectl apply -f confs/application.yaml
