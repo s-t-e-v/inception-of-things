@@ -3,15 +3,20 @@ kind: Simple # internally, we also have a Cluster config, which is not yet avail
 metadata:
   name: k3d-cluster # name that you want to give to your cluster (will still be prefixed with `k3d-`)
 servers: 1
-agents: 1
 kubeAPI: # same as `--api-port myhost.my.domain:6445` (where the name would resolve to 127.0.0.1)
   hostIP: "127.0.0.1" # where the Kubernetes API will be listening on
   hostPort: "6445" # where the Kubernetes API listening port will be mapped to on your host system
 image: rancher/k3s:v1.35.2-k3s1
 ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
   - port: 8888:80
     nodeFilters:
       - loadbalancer
+  - port: 2222:30222
+    nodeFilters:
+      - server:0
 options:
   k3d:
     wait: true # wait for cluster to be usable before returning; same as `--wait` (default: true)

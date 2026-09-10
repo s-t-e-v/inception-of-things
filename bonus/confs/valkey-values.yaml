@@ -1,15 +1,21 @@
 auth:
-  enabled: true
-  aclUsers:
-    default:
-      password: "$PASS"
-      permissions: "~* &* +@all"
+  enabled: false
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 384Mi
+
+metrics:
+  enabled: false
 
 replica:
-  enabled: true
-  replicas: 3
+  enabled: false
   persistence:
-    size: 8Gi
+    size: 1Gi
 
 valkeyConfig: |
   appendonly yes

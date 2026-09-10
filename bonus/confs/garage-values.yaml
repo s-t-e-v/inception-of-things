@@ -1,0 +1,27 @@
+garage:
+  replicationFactor: 1
+
+# Start 1 instance (StatefulSet) of garage
+deployment:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 384Mi
+
+# Override default storage class and size
+persistence:
+  meta:
+    storageClass: "local-path"
+    size: 100Mi
+  data:
+    storageClass: "local-path"
+    size: 1Gi
+
+ingress:
+  s3:
+    api:
+      enabled: false

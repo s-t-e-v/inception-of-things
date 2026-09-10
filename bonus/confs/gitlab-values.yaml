@@ -1,59 +1,142 @@
 global:
   email:
-    from: <your-email>
-    reply_to: <your-email>
+    from: gitlab@local.test
+    reply_to: gitlab@local.test
   smtp:
-    address: <mail-server-address>
-    authentication: login
-    enabled: true
-    password:
-      key: password
-      secret: smtp-password  # you need to create this secret before applying
-    port: 587
-    starttls_auto: true
-    user_name: <your-email>
+    enabled: false
+  appConfig:
+    object_store:
+      enabled: true
+    artifacts:
+      enabled: false
+    lfs:
+      enabled: false
+    uploads:
+      enabled: false
+    packages:
+      enabled: false
   edition: ce
+  registry:
+    enabled: false
+  shell:
+    port: 2222
   hosts:
-    domain: <your-domain>
-    externalIP: <your-cluster-public-ip>
+    domain: localhost
+    https: false
   kas:
     enabled: false
   psql:
     database: gitlab
-    host: pgsql.postgres.svc.cluster.local
+    host: gitlab-postgres-rw.gitlab.svc.cluster.local
+    version: 17
     password:
       key: password
       secret: pgsql-secrets
     username: postgres
+  redis:
+    host: valkey.gitlab.svc.cluster.local
+    port: 6379
+    auth:
+      enabled: false
+  gatewayApi:
+    enabled: false
+    installEnvoy: false
+  ingress:
+    enabled: true
+    class: traefik
+    configureCertmanager: false
+    tls:
+      enabled: false
+
+nginx-ingress:
+  enabled: false
+
+installCertmanager: false
 
 certmanager-issuer:
-  email: <issuer-mail-address>
+  email: gitlab@local.test
+
+registry:
+  enabled: false
 
 redis:
-  storageClass: local-storage
-  
-# postgresql:
-#   install: false
-
-minio:
-  persistence:
-    storageClass: local-storage
-    size: 650Gi
+  install: false
 
 prometheus:
-  server:
-    persistentVolume:
-      size: 100Gi
-      storageClass: local-storage
+  install: false
+
 gitlab:
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+    workerProcesses: 1
+    puma:
+      threads:
+        min: 2
+        max: 2
+      disableWorkerKiller: false
+      workerMaxMemory: 900
+    resources:
+      requests:
+        cpu: 200m
+        memory: 1Gi
+      limits:
+        cpu: 2
+        memory: 2Gi
+    workhorse:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 50Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+    concurrency: 5
+    memoryKiller:
+      maxRss: 800000
+      hardLimitRss: 1000000
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1200Mi
+  gitlab-shell:
+    minReplicas: 1
+    maxReplicas: 1
+    service:
+      type: NodePort
+      nodePort: 30222
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 250m
+        memory: 128Mi
+  gitaly:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+  gitlab-exporter:
+    enabled: false
   toolbox:
+    enabled: false
     backups:
       cron:
-        enabled: true
+        enabled: false
   gitaly:
     persistence:
-      size: 600Gi
-      storageClass: local-storage
+      size: 1Gi
+      storageClass: local-path
 
 gitlab-runner:
   install: false
