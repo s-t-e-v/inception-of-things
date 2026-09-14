@@ -55,7 +55,7 @@ credentials:
 		printf '%s\n' "Error: GitLab's initial root password is not available yet." >&2; \
 		exit 1; \
 	fi; \
-	printf 'Username: root\nPassword: %s\n' "$$password"
+	printf 'URL: http://gitlab.localhost\nUsername: root\nPassword: %s\n' "$$password"
 
 status:
 	kubectl get nodes
