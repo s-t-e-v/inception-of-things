@@ -4,10 +4,15 @@ set -e
 
 SERVER_IP="192.168.56.110"
 
-if ! command -v curl >/dev/null 2>&1; then
-    apt update
-    apt install curl -y
+if ! command -v curl >/dev/null 2>&1 || ! command -v ifconfig >/dev/null 2>&1; then
+  apt update
+  apt install -y curl net-tools
 fi
+
+SBIN_PATH_LINE='export PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"'
+grep -qxF "$SBIN_PATH_LINE" /home/vagrant/.bashrc || \
+  echo "$SBIN_PATH_LINE" >> /home/vagrant/.bashrc
+chown vagrant:vagrant /home/vagrant/.bashrc
 
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server \
   --node-ip=${SERVER_IP} \
@@ -22,6 +27,7 @@ sed -i "s/127.0.0.1/${SERVER_IP}/g" /home/vagrant/.kube/config
 
 echo "K3s server installed. Node token:"
 echo 'export KUBECONFIG=/home/vagrant/.kube/config' > /etc/profile.d/k3s-kubeconfig.sh
+echo "alias k='kubectl'" >> /etc/profile.d/k3s-kubeconfig.sh
 chmod +x /etc/profile.d/k3s-kubeconfig.sh
 cat /var/lib/rancher/k3s/server/node-token
 

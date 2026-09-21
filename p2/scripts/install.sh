@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SERVER_IP="192.168.56.110"
 # SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MANIFESTS_DIR="manifests"
 
@@ -16,7 +17,11 @@ fi
 
 if ! command -v k3s >/dev/null 2>&1; then
   echo "Installing K3s..."
-  curl -sfL https://get.k3s.io | sh -
+  curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server \
+  --node-ip=${SERVER_IP} \
+  --bind-address=${SERVER_IP} \
+  --advertise-address=${SERVER_IP} \
+  --flannel-iface=eth1" sh -
 fi
 
 if command -v systemctl >/dev/null 2>&1; then

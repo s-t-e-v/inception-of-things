@@ -4,10 +4,20 @@ set -e
 SERVER_IP="192.168.56.110"
 WORKER_IP="192.168.56.111"
 
-if ! command -v curl >/dev/null 2>&1; then
-    apt update
-    apt install curl -y
+if ! command -v curl >/dev/null 2>&1 || ! command -v ifconfig >/dev/null 2>&1; then
+  apt update
+  apt install -y curl net-tools
 fi
+
+SBIN_PATH_LINE='export PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"'
+grep -qxF "$SBIN_PATH_LINE" /home/vagrant/.bashrc || \
+  echo "$SBIN_PATH_LINE" >> /home/vagrant/.bashrc
+chown vagrant:vagrant /home/vagrant/.bashrc
+
+cat > /etc/profile.d/kubectl-alias.sh <<'EOF'
+alias k='kubectl'
+EOF
+chmod +x /etc/profile.d/kubectl-alias.sh
 
 echo "Waiting for node-token from server..."
 until curl -sf "http://${SERVER_IP}:8000/node-token" -o /tmp/node-token; do
