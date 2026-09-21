@@ -1,0 +1,28 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: gitlab-postgres
+  namespace: gitlab
+
+spec:
+  postgresql:
+    parameters:
+      max_locks_per_transaction: "128"
+
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:17
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 768Mi
+
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: pgsql-secrets
+
+  storage:
+    size: 2Gi

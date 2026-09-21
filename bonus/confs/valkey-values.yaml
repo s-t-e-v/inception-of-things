@@ -1,0 +1,21 @@
+auth:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 384Mi
+
+metrics:
+  enabled: false
+
+replica:
+  enabled: false
+  persistence:
+    size: 1Gi
+
+valkeyConfig: |
+  appendonly yes
