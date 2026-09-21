@@ -44,6 +44,12 @@ Restore Argo CD's original GitHub source with:
 make argocd-github
 ```
 
+Open the Argo CD web interface locally with:
+
+```sh
+make argocd-ui
+```
+
 Use `make help` to list the optional status, UI, SSH, repository, and cleanup
 commands.
 
