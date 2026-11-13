@@ -1,6 +1,6 @@
 
-BOX_IMAGE   = "debian/trixie64"
-RAM_SIZE    = 2024
+BOX_IMAGE   = "debian/trixie64" 
+RAM_SIZE    = 2025
 CPUS        = 2
 LOGIN       = "sbandaog"
 SCRIPT_DIR  = "scripts"
